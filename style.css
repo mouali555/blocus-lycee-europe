@@ -242,6 +242,7 @@ body {
   font-weight: 700;
   box-shadow: 0 8px 30px rgba(200, 50, 50, 0.4);
   transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+  /* No float-bob on mobile - interferes with layout */
   animation: float-bob 3.5s ease-in-out infinite;
 }
 .float-insta:hover {
@@ -701,14 +702,15 @@ body {
 /* HERO SCROLL INDICATOR — MOUSE STYLE */
 .hero-scroll-indicator {
   position: absolute;
-  bottom: 5.5rem;
+  /* sits just above the ticker bar (~38px tall) */
+  bottom: calc(38px + 1.8rem);
   left: 50%;
   transform: translateX(-50%);
   z-index: 3;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.6rem;
   animation: fadeIn 1s 1.2s ease both;
   cursor: pointer;
   opacity: 0.55;
@@ -750,9 +752,12 @@ body {
   position: absolute;
   bottom: 0; left: 0; right: 0;
   background: linear-gradient(135deg, var(--red-dark), var(--red), var(--red-bright));
-  padding: 0.7rem 0;
+  padding: 0.65rem 0;
   overflow: hidden;
   z-index: 4;
+  height: 38px;
+  display: flex;
+  align-items: center;
 }
 .ticker-track {
   display: flex;
@@ -1945,145 +1950,210 @@ body {
 }
 
 /* ============================================================
-   MOBILE — FULL APP-GRADE OVERHAUL
-   Treat this like a native app: safe areas, clean grids,
-   zero overflow, proper touch targets (min 44px), legible type
+   MOBILE — APP-GRADE v2.0
+   Full overhaul. Treat every pixel like a native iOS/Android app.
    ============================================================ */
 
-/* iOS safe area padding */
+/* ── iOS Safe Areas ─────────────────────────────────────── */
 @supports (padding: env(safe-area-inset-bottom)) {
   .float-insta {
-    bottom: calc(1.5rem + env(safe-area-inset-bottom));
-  }
-  .ticker-bar {
-    padding-bottom: calc(0.7rem + env(safe-area-inset-bottom));
+    /* stay well above home bar on iPhone */
+    bottom: calc(5rem + env(safe-area-inset-bottom));
   }
   .footer {
     padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
   }
 }
 
+/* ── Global mobile body ──────────────────────────────────── */
 @media (max-width: 768px) {
+  html {
+    /* Smooth iOS momentum scroll */
+    -webkit-overflow-scrolling: touch;
+    /* Prevent horizontal scroll bleed */
+    overflow-x: hidden;
+  }
+  body {
+    overflow-x: hidden;
+  }
 
-  /* === LOADER === */
-  .loader-text { font-size: 4rem; letter-spacing: 6px; }
-  .loader-rings { width: 160px; height: 160px; }
-  .loader-fist { font-size: 3rem; }
+  /* ── LOADER ── */
+  .loader-text { font-size: 3.8rem; letter-spacing: 5px; }
+  .loader-rings { width: 150px; height: 150px; top: 48%; left: 50%; }
+  .loader-fist { font-size: 2.8rem; }
+  .loader-sub { font-size: 0.72rem; letter-spacing: 2.5px; }
 
-  /* === NAVBAR === */
-  .navbar { padding: 0 1.1rem; }
-  .nav-inner { height: 64px; }
-  .logo-main { font-size: 1.4rem; letter-spacing: 3px; }
-  .logo-sub { font-size: 0.55rem; }
-  .logo-fist { font-size: 1.3rem; }
-  .burger { padding: 10px; }
+  /* ── NAVBAR ── */
+  .navbar { padding: 0 1rem; }
+  .nav-inner { height: 60px; }
+  .logo-main { font-size: 1.35rem; letter-spacing: 3px; }
+  .logo-sub { font-size: 0.52rem; letter-spacing: 1.5px; }
+  .logo-fist { font-size: 1.2rem; }
+  .burger { padding: 10px; border-radius: 8px; }
   .burger span { width: 22px; }
 
-  /* Mobile nav full screen feel */
-  .nav-mobile {
-    padding: 0.5rem 0 1rem;
-  }
+  /* ── MOBILE NAV MENU — full app drawer feel ── */
+  .nav-mobile { padding: 0.25rem 0 1.25rem; }
   .nav-mobile a {
-    font-size: 1.05rem;
-    padding: 1rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    padding: 0.9rem 1.5rem;
     min-height: 52px;
     display: flex;
     align-items: center;
+    letter-spacing: 0.3px;
   }
+  /* "Rejoins-nous" = big red CTA button inside menu */
   .nav-mobile .mobile-cta {
-    margin: 0.5rem 1.5rem 0;
-    background: rgba(204,0,34,0.1);
-    border: 1px solid rgba(204,0,34,0.3);
-    border-radius: 12px;
-    padding: 1rem 1.5rem;
-    border-left: none;
-    color: var(--red-bright) !important;
+    display: flex;
+    align-items: center;
     justify-content: center;
+    margin: 0.75rem 1rem 0;
+    padding: 1rem;
+    background: linear-gradient(135deg, var(--red-dark), var(--red-bright));
+    border: none;
+    border-left: none !important;
+    border-radius: 14px;
+    color: white !important;
     font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-height: 54px;
+    box-shadow: 0 4px 20px rgba(204,0,34,0.35);
   }
   .nav-mobile .mobile-cta:hover {
-    background: rgba(204,0,34,0.18);
-    border-color: rgba(204,0,34,0.5);
-    padding-left: 1.5rem;
+    background: linear-gradient(135deg, var(--red), var(--red-bright));
+    padding-left: 1rem;
+    border-left: none !important;
   }
 
-  /* === HERO === */
+  /* ── HERO ── */
   .hero-content {
-    padding: 6.5rem 1.25rem 8rem;
+    /* Tighter on mobile: no more 8rem gap */
+    padding: 6rem 1.25rem 5.5rem;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
+
   .hero-badge {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     letter-spacing: 1.5px;
-    padding: 0.4rem 0.9rem;
-    margin-bottom: 1.4rem;
+    padding: 0.38rem 0.85rem;
+    margin-bottom: 1.2rem;
   }
+
   .title-blocus {
-    font-size: clamp(5rem, 25vw, 8rem);
-    letter-spacing: 2px;
+    font-size: clamp(5rem, 24vw, 7.5rem);
+    letter-spacing: 1px;
+    line-height: 0.9;
   }
+
   .hero-location {
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     letter-spacing: 1.5px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.9rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 100%;
-    justify-content: center;
-  }
-  .hero-sub {
-    font-size: 0.95rem;
-    margin-bottom: 1.75rem;
-    min-height: 2.5em;
-    line-height: 1.6;
+    max-width: calc(100vw - 2.5rem);
   }
 
-  /* Hero buttons: full-width on mobile */
+  .hero-sub {
+    font-size: 0.92rem;
+    margin-bottom: 1.5rem;
+    min-height: 2.2em;
+    line-height: 1.65;
+    text-align: center;
+    max-width: 340px;
+  }
+
+  /* Hero buttons: full-width, app-like */
   .hero-btns {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.65rem;
     width: 100%;
-    max-width: 340px;
-    margin: 0 auto;
+    max-width: 320px;
   }
   .btn {
     width: 100%;
     justify-content: center;
-    padding: 1rem 1.5rem;
-    font-size: 0.95rem;
+    padding: 0.95rem 1.25rem;
+    font-size: 0.92rem;
     border-radius: 14px;
-    min-height: 52px; /* Touch target */
+    min-height: 52px;
   }
 
-  /* Hide wave on mobile — frees vertical space */
+  /* HIDE wave — saves space, reduces clutter */
   .hero-wave-decor { display: none; }
 
-  /* Scroll indicator: compact, no overlap */
+  /* ── SCROLL INDICATOR — right above ticker, centered ── */
   .hero-scroll-indicator {
-    bottom: 4rem;
-    gap: 0.5rem;
+    /* ticker is exactly 38px tall. place indicator 0.8rem above it */
+    bottom: calc(38px + 0.8rem);
+    gap: 0.4rem;
+    opacity: 0.5;
   }
-  .scroll-mouse { width: 20px; height: 32px; }
-  .hero-scroll-indicator span { font-size: 0.62rem; letter-spacing: 2px; }
+  .scroll-mouse {
+    width: 18px;
+    height: 28px;
+    border-radius: 9px;
+    padding-top: 4px;
+  }
+  .scroll-wheel { width: 2px; height: 6px; }
+  .hero-scroll-indicator span {
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+  }
 
-  /* Ticker smaller on mobile */
-  .ticker-bar { padding: 0.55rem 0; }
-  .ticker-track span { font-size: 0.72rem; letter-spacing: 1.5px; }
+  /* ── TICKER — clean and centered ── */
+  .ticker-bar {
+    /* Override padding since we set explicit height */
+    padding: 0;
+    height: 38px;
+  }
+  .ticker-track {
+    gap: 2rem;
+  }
+  .ticker-track span {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+  }
 
-  /* === LIVE COUNTER === */
-  .live-counter-section { padding: 2.5rem 1.25rem; }
-  .live-counter-title { font-size: 0.9rem; margin-bottom: 1.5rem; }
-  .live-label { font-size: 0.65rem; letter-spacing: 2px; }
+  /* ── FLOAT INSTAGRAM — above browser chrome, never overlapping ticker ── */
+  .float-insta {
+    /* Fixed high enough to not overlap ticker or browser nav */
+    bottom: 5rem;
+    right: 0.85rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+    /* No bob animation on mobile — causes jumpiness */
+    animation: none;
+    box-shadow: 0 4px 18px rgba(180,30,100,0.45), 0 0 0 2px rgba(255,255,255,0.12);
+  }
+  .float-insta span { display: none; }
+  .float-insta svg { width: 20px; height: 20px; }
 
-  /* Clean 2x2 grid counter */
+  /* ── LIVE COUNTER — clean 2×2 app widget ── */
+  .live-counter-section { padding: 2.25rem 1.25rem 2.5rem; }
+  .live-counter-title {
+    font-size: 0.88rem;
+    margin-bottom: 1.4rem;
+    letter-spacing: 0.5px;
+  }
+  .live-label { font-size: 0.63rem; letter-spacing: 2px; margin-bottom: 0.75rem; }
+
   .live-counter-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.75rem 1rem;
-    max-width: 300px;
+    grid-template-rows: auto auto;
+    gap: 0.65rem;
+    max-width: 280px;
     margin: 0 auto 1.25rem;
-    align-items: start;
   }
   .live-sep { display: none; }
   .live-unit {
@@ -2091,137 +2161,159 @@ body {
     width: 100%;
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 0.85rem 0.5rem 0.75rem;
+    border-radius: 14px;
+    padding: 0.9rem 0.5rem 0.75rem;
+    transition: none; /* no hover on touch */
   }
-  .live-num {
-    font-size: clamp(2.2rem, 10vw, 3.5rem);
-  }
-  .live-unit-label {
-    font-size: 0.62rem;
-    letter-spacing: 1.5px;
-  }
-  .live-sub { font-size: 0.8rem; }
+  .live-num { font-size: clamp(2.4rem, 12vw, 3.8rem); }
+  .live-unit-label { font-size: 0.6rem; letter-spacing: 1.5px; }
+  .live-sub { font-size: 0.78rem; }
 
-  /* === SECTIONS === */
-  .section { padding: 4rem 1.25rem; }
+  /* ── SECTIONS ── */
+  .section { padding: 3.75rem 1.25rem; }
+  .section-title { font-size: clamp(2.4rem, 10vw, 3.8rem); }
+  .section-desc { font-size: 0.9rem; }
 
-  /* === MOUVEMENT === */
-  .stat-card { padding: 1.5rem 1.2rem; }
+  /* ── MOUVEMENT ── */
+  .stat-card { padding: 1.4rem 1.1rem; }
   .stat-number { font-size: 3rem; }
-  .stat-label { font-size: 0.78rem; }
+  .stat-label { font-size: 0.76rem; }
+  .support-tags { gap: 0.4rem; }
+  .tag { font-size: 0.7rem; padding: 0.28rem 0.75rem; }
 
-  /* === REVENDICATIONS === */
-  .demand-card { padding: 1.6rem; }
-  .demand-card h3 { font-size: 0.95rem; }
-  .demand-card p { font-size: 0.84rem; }
+  /* ── REVENDICATIONS ── */
+  .demand-card { padding: 1.5rem 1.25rem; }
+  .demand-card h3 { font-size: 0.92rem; }
+  .demand-card p { font-size: 0.83rem; }
+  .demand-num { font-size: 2.8rem; }
 
-  /* === ALERTE === */
-  .alerte-section { padding: 1.25rem; }
-  .alerte-card { padding: 1.1rem 1.25rem; gap: 1rem; }
-  .alerte-text p { font-size: 0.85rem; }
-  .alerte-link { font-size: 0.85rem; }
+  /* ── ALERTE ── */
+  .alerte-section { padding: 1rem 1.1rem; }
+  .alerte-card { padding: 1rem 1.1rem; gap: 0.85rem; }
+  .alerte-text p { font-size: 0.83rem; line-height: 1.6; }
+  .alerte-link { font-size: 0.83rem; margin-top: 0.35rem; display: inline-block; }
 
-  /* === MANIFESTE === */
-  .manifeste-section { padding: 5rem 1.25rem; }
-  .manifeste-quote { font-size: 1.05rem; }
-  .q-mark { font-size: 3.5rem; vertical-align: -1.3rem; }
+  /* ── MANIFESTE ── */
+  .manifeste-section { padding: 4.5rem 1.25rem; }
+  .manifeste-quote { font-size: 1rem; line-height: 1.8; padding: 0; }
+  .q-mark { font-size: 3rem; vertical-align: -1.1rem; }
+  .manifeste-sig { font-size: 0.8rem; }
 
-  /* === GALERIE === */
-  .galerie-grid { gap: 0.75rem; }
+  /* ── GALERIE — captions always visible on touch ── */
+  .galerie-grid { gap: 0.65rem; }
   .galerie-item { border-radius: 12px; }
-  /* Always show caption on mobile (no hover) */
   .galerie-overlay {
     opacity: 1;
-    background: linear-gradient(to top, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0.2) 50%, transparent 100%);
+    background: linear-gradient(
+      to top,
+      rgba(6,6,8,0.92) 0%,
+      rgba(6,6,8,0.3) 45%,
+      transparent 100%
+    );
   }
   .galerie-caption { transform: none; }
-  .galerie-caption strong { font-size: 0.9rem; }
-  .galerie-caption span { font-size: 0.75rem; }
+  .galerie-caption strong { font-size: 0.88rem; }
+  .galerie-caption span { font-size: 0.73rem; }
+  .galerie-overlay { padding: 1.25rem; }
 
-  /* === CHRONOLOGIE === */
-  .tl-card { padding: 1.2rem; }
-  .tl-card h3 { font-size: 0.92rem; }
-  .tl-card p { font-size: 0.82rem; }
+  /* ── CHRONOLOGIE ── */
+  .tl-card { padding: 1.1rem; }
+  .tl-card h3 { font-size: 0.9rem; }
+  .tl-card p { font-size: 0.81rem; }
+  .tl-date { font-size: 0.68rem; }
+  .itag { font-size: 0.67rem; padding: 0.18rem 0.55rem; }
 
-  /* === DUNKERQUE === */
-  .dinfo { padding: 0.85rem; }
-  .dinfo-val { font-size: 0.82rem; }
+  /* ── DUNKERQUE ── */
+  .dunkerque-info-grid { gap: 0.65rem; }
+  .dinfo { padding: 0.8rem 0.65rem; }
+  .dinfo-val { font-size: 0.8rem; }
+  .dinfo-label { font-size: 0.62rem; }
+  .lycee-info strong { font-size: 0.85rem; }
+  .lycee-info span { font-size: 0.72rem; }
 
-  /* === REJOINDRE === */
-  .rejoindre-inner { padding: 0; }
-  .action-card { padding: 1.8rem 1.25rem; }
-  .action-card .action-icon { width: 60px; height: 60px; font-size: 2rem; }
-  .solidarity-banner { padding: 1.4rem; gap: 1rem; }
-  .sol-text strong { font-size: 0.95rem; }
-  .sol-text p { font-size: 0.85rem; }
+  /* ── REJOINDRE ── */
+  .action-card { padding: 1.65rem 1.1rem; border-radius: 16px; }
+  .action-card .action-icon { width: 58px; height: 58px; font-size: 1.9rem; }
+  .action-card strong { font-size: 0.95rem; }
+  .action-card span { font-size: 0.82rem; }
+  .solidarity-banner { padding: 1.25rem; gap: 0.9rem; border-radius: 16px; }
+  .sol-icon { font-size: 2.2rem; }
+  .sol-text strong { font-size: 0.92rem; }
+  .sol-text p { font-size: 0.83rem; }
 
-  /* === FOOTER === */
-  .footer { padding: 3rem 1.25rem 2rem; }
-  .footer-title { font-size: 1.8rem; }
-  .footer-subtitle { font-size: 0.68rem; }
-  .footer-fist { font-size: 2.2rem; }
-  .footer-nav a { font-size: 0.85rem; }
-  .footer-bottom p { font-size: 0.76rem; }
-  .footer-motto { font-size: 0.84rem !important; }
+  /* ── PRESSE ── */
+  .presse-card { padding: 1.5rem 1.25rem; }
+  .presse-card p { font-size: 0.88rem; }
+  .presse-quote-mark { font-size: 4rem; }
 
-  /* === FLOATING INSTAGRAM === */
-  .float-insta {
-    bottom: 1.5rem;
-    right: 1rem;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    padding: 0;
-    justify-content: center;
-    box-shadow: 0 4px 20px rgba(200,50,50,0.4), 0 0 0 2px rgba(255,255,255,0.1);
-  }
-  .float-insta svg { width: 20px; height: 20px; }
-
-  /* Section titles smaller */
-  .section-title { font-size: clamp(2.5rem, 10vw, 4rem); }
-
-  /* Live counter section label */
-  .live-counter-inner { padding: 0 0.5rem; }
+  /* ── FOOTER ── */
+  .footer { padding: 2.5rem 1.1rem 1.75rem; }
+  .footer-title { font-size: 1.75rem; letter-spacing: 3px; }
+  .footer-subtitle { font-size: 0.66rem; }
+  .footer-fist { font-size: 2rem; }
+  .footer-nav { gap: 0.5rem 1rem; flex-direction: row; flex-wrap: wrap; }
+  .footer-nav a { font-size: 0.82rem; min-height: 36px; display: flex; align-items: center; }
+  .footer-bottom p { font-size: 0.74rem; }
+  .footer-motto { font-size: 0.82rem !important; }
+  .footer-inner { gap: 1.5rem; }
 }
 
-/* ===========================
-   EXTRA SMALL (< 380px)
-   e.g. iPhone SE, Galaxy A series
-   =========================== */
-@media (max-width: 380px) {
-  .hero-badge { font-size: 0.65rem; padding: 0.35rem 0.75rem; }
-  .title-blocus { font-size: clamp(4rem, 24vw, 5.5rem); }
-  .hero-location { font-size: 0.68rem; }
-  .live-counter-grid { max-width: 260px; gap: 0.5rem; }
-  .live-num { font-size: clamp(2rem, 11vw, 3rem); }
-  .live-unit { padding: 0.65rem 0.35rem; }
-  .loader-text { font-size: 3.2rem; }
-  .btn { font-size: 0.875rem; padding: 0.9rem 1.25rem; }
-  .section { padding: 3.5rem 1rem; }
+/* ── EXTRA SMALL < 390px (iPhone SE, Galaxy A) ─────────── */
+@media (max-width: 390px) {
+  .hero-content { padding: 5.5rem 1rem 5rem; }
+  .hero-badge { font-size: 0.63rem; padding: 0.32rem 0.7rem; letter-spacing: 1px; }
+  .title-blocus { font-size: clamp(4rem, 23vw, 5.5rem); }
+  .hero-sub { font-size: 0.88rem; }
+  .btn { font-size: 0.88rem; min-height: 50px; }
+  .live-counter-grid { max-width: 250px; gap: 0.5rem; }
+  .live-num { font-size: clamp(2rem, 12vw, 3.2rem); }
+  .live-unit { padding: 0.75rem 0.4rem; border-radius: 12px; }
+  .section { padding: 3.25rem 1rem; }
+  .section-title { font-size: clamp(2.2rem, 11vw, 3.2rem); }
+  .loader-text { font-size: 3rem; }
+  .loader-rings { width: 130px; height: 130px; }
+  .alerte-card { padding: 0.85rem 1rem; }
 }
 
-/* ===========================
-   TOUCH — remove hover effects
-   that feel wrong on mobile
-   =========================== */
+/* ── TOUCH DEVICE — remove all hover artifacts ──────────── */
 @media (hover: none) and (pointer: coarse) {
-  .btn:hover { transform: none; }
+  /* No hover transforms */
+  .btn:hover,
+  .btn-glass:hover,
+  .btn-glow:hover { transform: none; }
   .btn-glow:hover { box-shadow: 0 4px 30px var(--red-glow), inset 0 1px 0 rgba(255,255,255,0.15); }
-  .demand-card:hover { transform: none; }
-  .stat-card:hover { transform: none; }
-  .galerie-item:hover { transform: none; }
+  .btn-glass:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.18); box-shadow: none; }
+  .demand-card:hover { transform: none; box-shadow: none; }
+  .stat-card:hover { transform: none; box-shadow: none; }
+  .galerie-item:hover { transform: none; box-shadow: none; }
   .tag:hover { transform: none; }
   .lycee-item:hover { transform: none; }
   .dinfo:hover { transform: none; }
   .action-card:hover .action-icon { transform: none; }
   .nav-links a::after { display: none; }
+  .presse-card:hover { transform: none; box-shadow: none; }
+  .float-insta:hover { transform: none; }
 
-  /* Tap highlight removed */
+  /* Remove iOS blue tap flash */
   * { -webkit-tap-highlight-color: transparent; }
+  a, button { -webkit-tap-highlight-color: transparent; }
 
-  /* Bigger tap targets */
+  /* Touch feedback via active state instead */
+  .btn:active { opacity: 0.85; transform: scale(0.98); }
+  .action-card:active { opacity: 0.9; }
+  .galerie-item:active { opacity: 0.9; }
+  .nav-mobile a:active { background: rgba(255,255,255,0.06); }
+  .float-insta:active { opacity: 0.85; transform: scale(0.96); }
+
+  /* Ensure all tap targets are big enough */
   .btn { min-height: 52px; }
   .nav-mobile a { min-height: 52px; }
   .footer-nav a { min-height: 44px; display: flex; align-items: center; }
+  .alerte-link { min-height: 44px; display: inline-flex; align-items: center; }
+  .tl-cta { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* No 3D tilt cursor effects on touch */
+  .demand-card, .stat-card, .presse-card, .action-card, .tl-card {
+    transform: none !important;
+  }
 }
