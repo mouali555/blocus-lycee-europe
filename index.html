@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <!-- ===== SÉCURITÉ ===== -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; frame-src 'none'; object-src 'none'; base-uri 'self';" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta name="referrer" content="no-referrer-when-downgrade" />
@@ -16,18 +15,28 @@
   <meta name="theme-color" content="#cc0022" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
+  <!-- CUSTOM CURSOR -->
+  <div id="custom-cursor" class="custom-cursor"></div>
+  <div id="cursor-dot" class="cursor-dot"></div>
+
   <!-- LOADER -->
   <div id="loader">
     <div class="loader-inner">
+      <div class="loader-rings">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+      </div>
       <div class="loader-fist">✊</div>
       <div class="loader-text">BLOCUS</div>
       <div class="loader-sub">Lycée de l'Europe — Dunkerque</div>
       <div class="loader-bar"><div class="loader-fill"></div></div>
+      <div class="loader-tagline">La lutte continue.</div>
     </div>
   </div>
 
@@ -54,6 +63,7 @@
         <li><a href="#mouvement" id="nav-link-mouvement">Le Mouvement</a></li>
         <li><a href="#revendications" id="nav-link-revendications">Revendications</a></li>
         <li><a href="#chronologie" id="nav-link-chronologie">Chronologie</a></li>
+        <li><a href="#galerie" id="nav-link-galerie">Photos</a></li>
         <li><a href="#dunkerque" id="nav-link-dunkerque">Dunkerque</a></li>
         <li><a href="#rejoindre" class="nav-cta" id="nav-link-rejoindre">Rejoins-nous ✊</a></li>
       </ul>
@@ -65,6 +75,7 @@
       <a href="#mouvement">Le Mouvement</a>
       <a href="#revendications">Revendications</a>
       <a href="#chronologie">Chronologie</a>
+      <a href="#galerie">Photos</a>
       <a href="#dunkerque">Dunkerque</a>
       <a href="#rejoindre" class="mobile-cta">Rejoins-nous ✊</a>
     </div>
@@ -77,16 +88,21 @@
       <img src="hero.jpg" alt="Blocus Dunkerque — Lycéens en lutte" class="hero-img" id="hero-parallax" />
       <div class="hero-overlay"></div>
       <div class="hero-noise"></div>
+      <div class="hero-vignette"></div>
     </div>
     <div class="hero-content">
       <div class="hero-badge">
         <span class="badge-dot"></span>
+        <span class="badge-pulse-ring"></span>
         <span>Mouvement actif — Dunkerque</span>
       </div>
       <h1 class="hero-title">
         <span class="title-blocus glitch" data-text="BLOCUS">BLOCUS</span>
       </h1>
-      <p class="hero-location">Lycée de l'Europe — Petite-Synthe</p>
+      <p class="hero-location">
+        <span class="location-icon">📍</span>
+        Lycée de l'Europe — Petite-Synthe
+      </p>
       <p class="hero-sub" id="typewriter-target"></p>
       <div class="hero-btns">
         <a href="#revendications" class="btn btn-red btn-glow" id="btn-revendications">
@@ -95,25 +111,78 @@
         </a>
         <a href="#rejoindre" class="btn btn-glass" id="btn-rejoindre">Rejoins le mouvement ✊</a>
       </div>
+      <!-- Soundwave decorative -->
+      <div class="hero-wave-decor">
+        <canvas id="wave-canvas" width="600" height="60"></canvas>
+      </div>
     </div>
     <div class="hero-scroll-indicator" id="hero-scroll-indicator">
-      <div class="scroll-line"></div>
-      <span>Descendre</span>
+      <div class="scroll-mouse">
+        <div class="scroll-wheel"></div>
+      </div>
+      <span>Défiler</span>
     </div>
     <div class="ticker-bar">
       <div class="ticker-track" id="ticker-track">
         <span>🔴 BLOCUS ACTIF</span>
+        <span class="ticker-sep">◆</span>
         <span>✊ LYCÉE DE L'EUROPE EN LUTTE</span>
+        <span class="ticker-sep">◆</span>
         <span>📢 DUNKERQUE SE MOBILISE</span>
+        <span class="ticker-sep">◆</span>
         <span>⚡ ÉDUCATION PUBLIQUE EN DANGER</span>
+        <span class="ticker-sep">◆</span>
         <span>🔴 BLOCUS ACTIF</span>
+        <span class="ticker-sep">◆</span>
         <span>✊ LYCÉE DE L'EUROPE EN LUTTE</span>
+        <span class="ticker-sep">◆</span>
         <span>📢 DUNKERQUE SE MOBILISE</span>
+        <span class="ticker-sep">◆</span>
         <span>⚡ ÉDUCATION PUBLIQUE EN DANGER</span>
+        <span class="ticker-sep">◆</span>
         <span>🔴 BLOCUS ACTIF</span>
+        <span class="ticker-sep">◆</span>
         <span>✊ LYCÉE DE L'EUROPE EN LUTTE</span>
+        <span class="ticker-sep">◆</span>
         <span>📢 DUNKERQUE SE MOBILISE</span>
+        <span class="ticker-sep">◆</span>
         <span>⚡ ÉDUCATION PUBLIQUE EN DANGER</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== LIVE COUNTER ===== -->
+  <section class="live-counter-section" id="live-counter">
+    <div class="live-counter-bg"></div>
+    <div class="container">
+      <div class="live-counter-inner">
+        <div class="live-label">
+          <span class="live-dot"></span>
+          <span>EN DIRECT — BLOCUS EN COURS</span>
+        </div>
+        <div class="live-counter-title">Le blocus dure depuis</div>
+        <div class="live-counter-grid">
+          <div class="live-unit">
+            <div class="live-num" id="blocus-days">--</div>
+            <div class="live-unit-label">jours</div>
+          </div>
+          <div class="live-sep">:</div>
+          <div class="live-unit">
+            <div class="live-num" id="blocus-hours">--</div>
+            <div class="live-unit-label">heures</div>
+          </div>
+          <div class="live-sep">:</div>
+          <div class="live-unit">
+            <div class="live-num" id="blocus-mins">--</div>
+            <div class="live-unit-label">minutes</div>
+          </div>
+          <div class="live-sep">:</div>
+          <div class="live-unit">
+            <div class="live-num live-secs" id="blocus-secs">--</div>
+            <div class="live-unit-label">secondes</div>
+          </div>
+        </div>
+        <div class="live-sub">Chaque seconde compte. Rejoins-nous.</div>
       </div>
     </div>
   </section>
@@ -122,7 +191,10 @@
   <section class="alerte-section" id="alerte">
     <div class="container">
       <div class="alerte-card">
-        <div class="alerte-icon">⚠️</div>
+        <div class="alerte-icon-wrap">
+          <div class="alerte-icon">⚠️</div>
+          <div class="alerte-pulse"></div>
+        </div>
         <div class="alerte-text">
           <strong>INCIDENT GRAVE — 5 octobre 2026</strong>
           <p>Un véhicule 4x4 de la police nationale a foncé vers des lycéens manifestants à Dunkerque. Une enquête judiciaire pour <em>mise en danger d'autrui</em> a été ouverte par le parquet. Une adolescente de 14 ans blessée.</p>
@@ -135,8 +207,9 @@
   <!-- ===== MANIFESTE ===== -->
   <section class="manifeste-section" id="manifeste">
     <div class="manifeste-bg-text">LUTTE</div>
+    <div class="manifeste-lines"></div>
     <div class="container">
-      <div class="manifeste-inner">
+      <div class="manifeste-inner reveal-up">
         <div class="manifeste-label">Notre Manifeste</div>
         <blockquote class="manifeste-quote">
           <span class="q-mark">"</span>
@@ -147,6 +220,10 @@
           <span class="q-mark">"</span>
         </blockquote>
         <div class="manifeste-sig">— Les lycéens du Lycée de l'Europe, Dunkerque</div>
+        <div class="manifeste-actions">
+          <a href="#revendications" class="btn btn-red btn-glow btn-sm">Nos revendications →</a>
+          <a href="#rejoindre" class="btn btn-glass btn-sm">Rejoins-nous ✊</a>
+        </div>
       </div>
     </div>
   </section>
@@ -201,6 +278,7 @@
 
   <!-- ===== REVENDICATIONS ===== -->
   <section class="section revendications dark-section" id="revendications">
+    <div class="revendications-bg-glow"></div>
     <div class="container">
       <div class="section-header centered">
         <div class="section-label">Ce qu'on exige</div>
@@ -217,6 +295,7 @@
           <h3>Remplacement immédiat des profs absents</h3>
           <p>Des millions d'heures de cours perdues chaque année faute de remplaçants. On perd des mois de préparation au bac pendant que l'État regarde ailleurs.</p>
           <div class="demand-bar"><div class="demand-fill" style="width:90%"></div></div>
+          <div class="demand-bar-label"><span>Urgence</span><span>90%</span></div>
           <span class="demand-urgency urgent">Urgence maximale</span>
         </div>
         <div class="demand-card" id="demand-2">
@@ -227,6 +306,7 @@
           <h3>Réduction des effectifs par classe</h3>
           <p>30 à 35 élèves dans une salle, c'est impossible d'apprendre correctement. On réclame des effectifs qui permettent un vrai suivi pédagogique.</p>
           <div class="demand-bar"><div class="demand-fill" style="width:85%"></div></div>
+          <div class="demand-bar-label"><span>Urgence</span><span>85%</span></div>
           <span class="demand-urgency urgent">Urgence maximale</span>
         </div>
         <div class="demand-card" id="demand-3">
@@ -237,6 +317,7 @@
           <h3>Rénovation des infrastructures scolaires</h3>
           <p>Des locaux vétustes, du chauffage en panne, des équipements obsolètes. L'État investit des milliards ailleurs — les lycées publics méritent mieux.</p>
           <div class="demand-bar"><div class="demand-fill" style="width:75%"></div></div>
+          <div class="demand-bar-label"><span>Urgence</span><span>75%</span></div>
           <span class="demand-urgency high">Haute priorité</span>
         </div>
         <div class="demand-card" id="demand-4">
@@ -247,6 +328,7 @@
           <h3>Des emplois du temps humains</h3>
           <p>Journées de 8h à 18h avec des trous épuisants. La réforme du lycée a créé un chaos dans les plannings. On veut des rythmes qui permettent d'apprendre.</p>
           <div class="demand-bar"><div class="demand-fill" style="width:70%"></div></div>
+          <div class="demand-bar-label"><span>Urgence</span><span>70%</span></div>
           <span class="demand-urgency high">Haute priorité</span>
         </div>
         <div class="demand-card" id="demand-5">
@@ -257,6 +339,7 @@
           <h3>Suppression ou réforme radicale de Parcoursup</h3>
           <p>Une plateforme opaque qui sélectionne sans transparence. On n'est pas des dossiers à trier — on est des êtres humains. Le droit à la formation doit être garanti.</p>
           <div class="demand-bar"><div class="demand-fill" style="width:80%"></div></div>
+          <div class="demand-bar-label"><span>Urgence</span><span>80%</span></div>
           <span class="demand-urgency urgent">Urgence maximale</span>
         </div>
         <div class="demand-card" id="demand-6">
@@ -267,6 +350,7 @@
           <h3>Arrêt des coupes budgétaires dans l'Éducation</h3>
           <p>Chaque budget, de nouveaux postes supprimés. L'école publique saigne. On exige un plan d'urgence massif, pas des promesses creuses.</p>
           <div class="demand-bar"><div class="demand-fill" style="width:95%"></div></div>
+          <div class="demand-bar-label"><span>Urgence</span><span>95%</span></div>
           <span class="demand-urgency urgent">Urgence maximale</span>
         </div>
       </div>
@@ -282,7 +366,9 @@
         <div class="title-line"></div>
       </div>
       <div class="timeline">
-        <div class="tl-line"></div>
+        <div class="tl-line">
+          <div class="tl-line-anim"></div>
+        </div>
 
         <div class="timeline-item left" id="tl-1">
           <div class="tl-dot"></div>
@@ -344,6 +430,65 @@
           </div>
         </div>
 
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== GALERIE PHOTOS ===== -->
+  <section class="section galerie dark-section" id="galerie">
+    <div class="container">
+      <div class="section-header centered">
+        <div class="section-label">En images</div>
+        <h2 class="section-title">Le Blocus en Photos</h2>
+        <div class="title-line centered"></div>
+        <p class="section-desc">De vraies photos prises sur le terrain par les lycéens en lutte. Pas de mise en scène — la réalité brute.</p>
+      </div>
+      <div class="galerie-grid">
+        <div class="galerie-item galerie-hero reveal-up">
+          <img src="img/groupe.png" alt="Groupe de lycéens mobilisés lors du blocus — Dunkerque" loading="lazy" />
+          <div class="galerie-overlay">
+            <div class="galerie-caption">
+              <strong>Mobilisés et solidaires</strong>
+              <span>Les lycéens unis dans la rue — Dunkerque, octobre 2026</span>
+            </div>
+          </div>
+        </div>
+        <div class="galerie-item reveal-left">
+          <img src="img/drapeau.jpg" alt="Lycéen portant le drapeau français lors du blocus de Dunkerque" loading="lazy" />
+          <div class="galerie-overlay">
+            <div class="galerie-caption">
+              <strong>Sous les couleurs de la France</strong>
+              <span>La lutte pour l'école publique est un combat républicain</span>
+            </div>
+          </div>
+        </div>
+        <div class="galerie-item reveal-right">
+          <img src="img/pancartes.png" alt="Lycéennes avec pancartes de revendication lors du blocus" loading="lazy" />
+          <div class="galerie-overlay">
+            <div class="galerie-caption">
+              <strong>Nos voix portent</strong>
+              <span>Des revendications claires, portées avec conviction</span>
+            </div>
+          </div>
+        </div>
+        <div class="galerie-item reveal-left">
+          <img src="img/pancarte-gav.jpg" alt="Pancarte 8H-18H On va au lycée ou en GAV — vitre brisée" loading="lazy" />
+          <div class="galerie-overlay">
+            <div class="galerie-caption">
+              <strong>"8H-18H : au lycée ou en G.A.V"</strong>
+              <span>Le quotidien absurde des lycéens mobilisés</span>
+            </div>
+          </div>
+        </div>
+        <div class="galerie-item reveal-right">
+          <img src="img/feu.jpg" alt="Tensions lors du blocus à Dunkerque — fumée et forces de l'ordre" loading="lazy" />
+          <div class="galerie-overlay">
+            <div class="galerie-caption">
+              <strong>La situation dégénère</strong>
+              <span>Quand l'État répond par la force à des lycéens</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -465,6 +610,7 @@
   <!-- ===== REJOINDRE ===== -->
   <section class="section rejoindre dark-section" id="rejoindre">
     <div class="rejoindre-bg-glow"></div>
+    <div class="rejoindre-grid-lines"></div>
     <div class="container">
       <div class="rejoindre-inner">
         <div class="section-label centered">Agis maintenant</div>
@@ -483,6 +629,7 @@
           </a>
 
           <div class="action-card" id="action-partager" onclick="sharesite()" role="button" tabindex="0">
+            <div class="action-glow"></div>
             <div class="action-icon">🔁</div>
             <strong>Partage ce site</strong>
             <span>Envoie le lien à tes amis et ta famille</span>
@@ -490,6 +637,7 @@
           </div>
 
           <div class="action-card" id="action-soutien">
+            <div class="action-glow"></div>
             <div class="action-icon">✊</div>
             <strong>Soutiens-nous</strong>
             <span>Pétitions, infos et actions sur notre Instagram</span>
@@ -525,6 +673,7 @@
           <a href="#mouvement">Le Mouvement</a>
           <a href="#revendications">Revendications</a>
           <a href="#chronologie">Chronologie</a>
+          <a href="#galerie">Photos</a>
           <a href="#dunkerque">Dunkerque</a>
           <a href="#rejoindre">Rejoins-nous</a>
         </nav>
