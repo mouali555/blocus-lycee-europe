@@ -1943,3 +1943,285 @@ body {
   .hero-content { padding: 7rem 1.25rem 5rem; }
   .mouvement-grid { gap: 2.5rem; }
 }
+
+/* ============================================================
+   MOBILE — FULL APP-GRADE OVERHAUL
+   Treat this like a native app: safe areas, clean grids,
+   zero overflow, proper touch targets (min 44px), legible type
+   ============================================================ */
+
+/* iOS safe area padding */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .float-insta {
+    bottom: calc(1.5rem + env(safe-area-inset-bottom));
+  }
+  .ticker-bar {
+    padding-bottom: calc(0.7rem + env(safe-area-inset-bottom));
+  }
+  .footer {
+    padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media (max-width: 768px) {
+
+  /* === LOADER === */
+  .loader-text { font-size: 4rem; letter-spacing: 6px; }
+  .loader-rings { width: 160px; height: 160px; }
+  .loader-fist { font-size: 3rem; }
+
+  /* === NAVBAR === */
+  .navbar { padding: 0 1.1rem; }
+  .nav-inner { height: 64px; }
+  .logo-main { font-size: 1.4rem; letter-spacing: 3px; }
+  .logo-sub { font-size: 0.55rem; }
+  .logo-fist { font-size: 1.3rem; }
+  .burger { padding: 10px; }
+  .burger span { width: 22px; }
+
+  /* Mobile nav full screen feel */
+  .nav-mobile {
+    padding: 0.5rem 0 1rem;
+  }
+  .nav-mobile a {
+    font-size: 1.05rem;
+    padding: 1rem 1.5rem;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+  }
+  .nav-mobile .mobile-cta {
+    margin: 0.5rem 1.5rem 0;
+    background: rgba(204,0,34,0.1);
+    border: 1px solid rgba(204,0,34,0.3);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    border-left: none;
+    color: var(--red-bright) !important;
+    justify-content: center;
+    font-size: 1rem;
+  }
+  .nav-mobile .mobile-cta:hover {
+    background: rgba(204,0,34,0.18);
+    border-color: rgba(204,0,34,0.5);
+    padding-left: 1.5rem;
+  }
+
+  /* === HERO === */
+  .hero-content {
+    padding: 6.5rem 1.25rem 8rem;
+    width: 100%;
+  }
+  .hero-badge {
+    font-size: 0.7rem;
+    letter-spacing: 1.5px;
+    padding: 0.4rem 0.9rem;
+    margin-bottom: 1.4rem;
+  }
+  .title-blocus {
+    font-size: clamp(5rem, 25vw, 8rem);
+    letter-spacing: 2px;
+  }
+  .hero-location {
+    font-size: 0.76rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    justify-content: center;
+  }
+  .hero-sub {
+    font-size: 0.95rem;
+    margin-bottom: 1.75rem;
+    min-height: 2.5em;
+    line-height: 1.6;
+  }
+
+  /* Hero buttons: full-width on mobile */
+  .hero-btns {
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 340px;
+    margin: 0 auto;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 1rem 1.5rem;
+    font-size: 0.95rem;
+    border-radius: 14px;
+    min-height: 52px; /* Touch target */
+  }
+
+  /* Hide wave on mobile — frees vertical space */
+  .hero-wave-decor { display: none; }
+
+  /* Scroll indicator: compact, no overlap */
+  .hero-scroll-indicator {
+    bottom: 4rem;
+    gap: 0.5rem;
+  }
+  .scroll-mouse { width: 20px; height: 32px; }
+  .hero-scroll-indicator span { font-size: 0.62rem; letter-spacing: 2px; }
+
+  /* Ticker smaller on mobile */
+  .ticker-bar { padding: 0.55rem 0; }
+  .ticker-track span { font-size: 0.72rem; letter-spacing: 1.5px; }
+
+  /* === LIVE COUNTER === */
+  .live-counter-section { padding: 2.5rem 1.25rem; }
+  .live-counter-title { font-size: 0.9rem; margin-bottom: 1.5rem; }
+  .live-label { font-size: 0.65rem; letter-spacing: 2px; }
+
+  /* Clean 2x2 grid counter */
+  .live-counter-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem 1rem;
+    max-width: 300px;
+    margin: 0 auto 1.25rem;
+    align-items: start;
+  }
+  .live-sep { display: none; }
+  .live-unit {
+    min-width: unset;
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.85rem 0.5rem 0.75rem;
+  }
+  .live-num {
+    font-size: clamp(2.2rem, 10vw, 3.5rem);
+  }
+  .live-unit-label {
+    font-size: 0.62rem;
+    letter-spacing: 1.5px;
+  }
+  .live-sub { font-size: 0.8rem; }
+
+  /* === SECTIONS === */
+  .section { padding: 4rem 1.25rem; }
+
+  /* === MOUVEMENT === */
+  .stat-card { padding: 1.5rem 1.2rem; }
+  .stat-number { font-size: 3rem; }
+  .stat-label { font-size: 0.78rem; }
+
+  /* === REVENDICATIONS === */
+  .demand-card { padding: 1.6rem; }
+  .demand-card h3 { font-size: 0.95rem; }
+  .demand-card p { font-size: 0.84rem; }
+
+  /* === ALERTE === */
+  .alerte-section { padding: 1.25rem; }
+  .alerte-card { padding: 1.1rem 1.25rem; gap: 1rem; }
+  .alerte-text p { font-size: 0.85rem; }
+  .alerte-link { font-size: 0.85rem; }
+
+  /* === MANIFESTE === */
+  .manifeste-section { padding: 5rem 1.25rem; }
+  .manifeste-quote { font-size: 1.05rem; }
+  .q-mark { font-size: 3.5rem; vertical-align: -1.3rem; }
+
+  /* === GALERIE === */
+  .galerie-grid { gap: 0.75rem; }
+  .galerie-item { border-radius: 12px; }
+  /* Always show caption on mobile (no hover) */
+  .galerie-overlay {
+    opacity: 1;
+    background: linear-gradient(to top, rgba(6,6,8,0.9) 0%, rgba(6,6,8,0.2) 50%, transparent 100%);
+  }
+  .galerie-caption { transform: none; }
+  .galerie-caption strong { font-size: 0.9rem; }
+  .galerie-caption span { font-size: 0.75rem; }
+
+  /* === CHRONOLOGIE === */
+  .tl-card { padding: 1.2rem; }
+  .tl-card h3 { font-size: 0.92rem; }
+  .tl-card p { font-size: 0.82rem; }
+
+  /* === DUNKERQUE === */
+  .dinfo { padding: 0.85rem; }
+  .dinfo-val { font-size: 0.82rem; }
+
+  /* === REJOINDRE === */
+  .rejoindre-inner { padding: 0; }
+  .action-card { padding: 1.8rem 1.25rem; }
+  .action-card .action-icon { width: 60px; height: 60px; font-size: 2rem; }
+  .solidarity-banner { padding: 1.4rem; gap: 1rem; }
+  .sol-text strong { font-size: 0.95rem; }
+  .sol-text p { font-size: 0.85rem; }
+
+  /* === FOOTER === */
+  .footer { padding: 3rem 1.25rem 2rem; }
+  .footer-title { font-size: 1.8rem; }
+  .footer-subtitle { font-size: 0.68rem; }
+  .footer-fist { font-size: 2.2rem; }
+  .footer-nav a { font-size: 0.85rem; }
+  .footer-bottom p { font-size: 0.76rem; }
+  .footer-motto { font-size: 0.84rem !important; }
+
+  /* === FLOATING INSTAGRAM === */
+  .float-insta {
+    bottom: 1.5rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    padding: 0;
+    justify-content: center;
+    box-shadow: 0 4px 20px rgba(200,50,50,0.4), 0 0 0 2px rgba(255,255,255,0.1);
+  }
+  .float-insta svg { width: 20px; height: 20px; }
+
+  /* Section titles smaller */
+  .section-title { font-size: clamp(2.5rem, 10vw, 4rem); }
+
+  /* Live counter section label */
+  .live-counter-inner { padding: 0 0.5rem; }
+}
+
+/* ===========================
+   EXTRA SMALL (< 380px)
+   e.g. iPhone SE, Galaxy A series
+   =========================== */
+@media (max-width: 380px) {
+  .hero-badge { font-size: 0.65rem; padding: 0.35rem 0.75rem; }
+  .title-blocus { font-size: clamp(4rem, 24vw, 5.5rem); }
+  .hero-location { font-size: 0.68rem; }
+  .live-counter-grid { max-width: 260px; gap: 0.5rem; }
+  .live-num { font-size: clamp(2rem, 11vw, 3rem); }
+  .live-unit { padding: 0.65rem 0.35rem; }
+  .loader-text { font-size: 3.2rem; }
+  .btn { font-size: 0.875rem; padding: 0.9rem 1.25rem; }
+  .section { padding: 3.5rem 1rem; }
+}
+
+/* ===========================
+   TOUCH — remove hover effects
+   that feel wrong on mobile
+   =========================== */
+@media (hover: none) and (pointer: coarse) {
+  .btn:hover { transform: none; }
+  .btn-glow:hover { box-shadow: 0 4px 30px var(--red-glow), inset 0 1px 0 rgba(255,255,255,0.15); }
+  .demand-card:hover { transform: none; }
+  .stat-card:hover { transform: none; }
+  .galerie-item:hover { transform: none; }
+  .tag:hover { transform: none; }
+  .lycee-item:hover { transform: none; }
+  .dinfo:hover { transform: none; }
+  .action-card:hover .action-icon { transform: none; }
+  .nav-links a::after { display: none; }
+
+  /* Tap highlight removed */
+  * { -webkit-tap-highlight-color: transparent; }
+
+  /* Bigger tap targets */
+  .btn { min-height: 52px; }
+  .nav-mobile a { min-height: 52px; }
+  .footer-nav a { min-height: 44px; display: flex; align-items: center; }
+}
