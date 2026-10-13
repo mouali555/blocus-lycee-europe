@@ -314,7 +314,10 @@ function initCounters() {
 // ===== PARALLAX =====
 function initParallax() {
   const img = document.getElementById('hero-parallax');
-  if (!img || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!img) return;
+  // Disable on mobile and reduced motion
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (window.innerWidth < 768) return;
   window.addEventListener('scroll', () => {
     if (window.scrollY < window.innerHeight) {
       img.style.transform = `translateY(${window.scrollY * 0.3}px) scale(1.08)`;
@@ -347,7 +350,9 @@ function initTicker() {
 
 // ===== 3D TILT CARDS =====
 function initTiltCards() {
+  // Disable on touch devices and reduced motion
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
 
   const tiltEls = document.querySelectorAll('.demand-card, .stat-card, .presse-card, .action-card, .tl-card');
 
@@ -395,6 +400,7 @@ function initTiltCards() {
 // ===== MAGNETIC BUTTONS =====
 function initMagneticButtons() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) return;
 
   document.querySelectorAll('.btn, .nav-cta, .action-main').forEach(btn => {
     btn.addEventListener('mousemove', (e) => {
@@ -458,11 +464,15 @@ function initSoundWave() {
   const ctx = canvas.getContext('2d');
 
   function resize() {
-    canvas.width = canvas.offsetWidth;
-    canvas.height = canvas.offsetHeight;
+    // Use parent width for proper sizing
+    const parent = canvas.parentElement;
+    canvas.width = parent ? parent.offsetWidth || 600 : 600;
+    canvas.height = 60;
+    canvas.style.width = '100%';
+    canvas.style.height = '60px';
   }
   resize();
-  window.addEventListener('resize', resize, { passive: true });
+  window.addEventListener('resize', () => { resize(); }, { passive: true });
 
   let t = 0;
   function draw() {
@@ -517,17 +527,22 @@ function initDemandBars() {
 
 // ===== SECTION DIVIDERS =====
 function initSectionDividers() {
-  // Dynamic gradient shifting for sections
-  let hue = 0;
   const redGlows = document.querySelectorAll('.rejoindre-bg-glow');
+  if (!redGlows.length) return;
+  // Set initial positioning via JS to ensure correct base transform
+  redGlows.forEach(g => {
+    g.style.position = 'absolute';
+    g.style.top = '50%';
+    g.style.left = '50%';
+  });
   function animGlow() {
-    hue = (hue + 0.3) % 360;
+    const scale = 1 + Math.sin(Date.now() * 0.001) * 0.1;
     redGlows.forEach(g => {
-      g.style.transform = `translate(-50%, -50%) scale(${1 + Math.sin(Date.now() * 0.001) * 0.1})`;
+      g.style.transform = `translate(-50%, -50%) scale(${scale})`;
     });
     requestAnimationFrame(animGlow);
   }
-  if (redGlows.length) animGlow();
+  animGlow();
 }
 
 // ===== SMOOTH SCROLL =====
@@ -602,30 +617,45 @@ document.querySelectorAll('.btn').forEach(btn => {
 });
 
 // ===== STATS SPARKLE on hover =====
-document.querySelectorAll('.stat-card').forEach(card => {
-  card.addEventListener('mouseenter', () => {
-    for (let i = 0; i < 6; i++) {
-      const spark = document.createElement('div');
-      spark.className = 'spark';
-      const rect = card.getBoundingClientRect();
-      spark.style.cssText = `
-        position: fixed;
-        left: ${rect.left + rect.width/2 + (Math.random()-0.5)*rect.width*0.8}px;
-        top: ${rect.top + rect.height/2 + (Math.random()-0.5)*rect.height*0.8}px;
-        width: 4px; height: 4px;
-        background: var(--red-bright);
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 9999;
-        animation: spark-anim 0.6s ease forwards;
-        animation-delay: ${i * 60}ms;
-        box-shadow: 0 0 6px var(--red-bright);
-      `;
-      document.body.appendChild(spark);
-      setTimeout(() => spark.remove(), 800);
-    }
+// Only on non-touch devices
+if (!('ontouchstart' in window) && navigator.maxTouchPoints === 0) {
+  document.querySelectorAll('.stat-card').forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      for (let i = 0; i < 6; i++) {
+        const spark = document.createElement('div');
+        spark.className = 'spark';
+        const rect = card.getBoundingClientRect();
+        // Random direction for each spark
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 30 + Math.random() * 40;
+        const sx = Math.cos(angle) * dist;
+        const sy = Math.sin(angle) * dist;
+        spark.style.cssText = `
+          position: fixed;
+          left: ${rect.left + rect.width/2 + (Math.random()-0.5)*rect.width*0.6}px;
+          top: ${rect.top + rect.height/2 + (Math.random()-0.5)*rect.height*0.6}px;
+          width: 5px; height: 5px;
+          background: var(--red-bright);
+          border-radius: 50%;
+          pointer-events: none;
+          z-index: 9999;
+          box-shadow: 0 0 6px var(--red-bright);
+          animation: none;
+          transition: transform 0.6s ease, opacity 0.6s ease;
+          animation-delay: ${i * 60}ms;
+        `;
+        document.body.appendChild(spark);
+        // Animate with JS translate to avoid CSS var issue
+        requestAnimationFrame(() => {
+          spark.style.transform = `translate(${sx}px, ${sy}px) scale(0)`;
+          spark.style.opacity = '0';
+          spark.style.transition = `transform 0.6s ease ${i*60}ms, opacity 0.6s ease ${i*60}ms`;
+        });
+        setTimeout(() => spark.remove(), 800);
+      }
+    });
   });
-});
+}
 
 console.log('%c✊ BLOCUS — Lycée de l\'Europe, Dunkerque', 'color:#ff1a35;font-size:20px;font-weight:bold;font-family:monospace;');
 console.log('%cLa lutte continue. Rejoins-nous : @blocus_europe', 'color:#888;font-size:13px;');

@@ -311,18 +311,20 @@ body {
 .nav-links {
   display: flex;
   list-style: none;
-  gap: 0.15rem;
+  gap: 0;
   align-items: center;
+  flex-wrap: nowrap;
 }
 .nav-links a {
   color: var(--text-muted);
   text-decoration: none;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  padding: 0.45rem 0.95rem;
+  padding: 0.45rem 0.7rem;
   border-radius: 8px;
   transition: color 0.2s, background 0.2s;
   position: relative;
+  white-space: nowrap;
 }
 .nav-links a:hover, .nav-links a.active-link { color: var(--white); }
 .nav-links a::after {
@@ -1424,10 +1426,15 @@ body {
   transition: transform 0.6s cubic-bezier(0.4,0,0.2,1), filter 0.4s;
 }
 .galerie-item.galerie-hero img {
-  max-height: 440px;
+  height: 420px;
+  max-height: 420px;
+  width: 100%;
+  object-fit: cover;
 }
 .galerie-item:not(.galerie-hero) img {
-  height: 280px;
+  height: 260px;
+  width: 100%;
+  object-fit: cover;
 }
 .galerie-item:hover img {
   transform: scale(1.08);
@@ -1883,6 +1890,9 @@ body {
   .dunkerque-grid { grid-template-columns: 1fr; gap: 2.5rem; }
   .dunkerque-lycees { position: static; }
   .live-counter-grid { gap: 0.25rem; }
+  /* Show burger at 1024px since nav gets tight with 7 links */
+  .nav-links { display: none; }
+  .burger { display: flex; }
 }
 @media (max-width: 768px) {
   .nav-links { display: none; }
@@ -1891,7 +1901,8 @@ body {
   .presse-grid { grid-template-columns: 1fr; }
   .actions-grid { grid-template-columns: 1fr; }
   .galerie-grid { grid-template-columns: 1fr; }
-  .galerie-item:not(.galerie-hero) img { height: 220px; }
+  .galerie-item.galerie-hero img { height: 260px; }
+  .galerie-item:not(.galerie-hero) img { height: 200px; }
   .tl-line { left: 20px; }
   .timeline-item { width: 100%; left: 0 !important; text-align: left !important; padding-left: 55px; }
   .timeline-item .tl-dot { left: 12px !important; right: auto !important; }
@@ -1907,14 +1918,28 @@ body {
   .live-counter-grid { gap: 0.15rem; }
   .live-unit { min-width: 65px; }
   .manifeste-actions { flex-direction: column; align-items: center; }
+  /* Hero img no heavy transform on mobile */
+  .hero-img { transform: none; will-change: auto; }
 }
 @media (max-width: 480px) {
   .section { padding: 5rem 1.25rem; }
-  .title-blocus { font-size: clamp(4.5rem, 22vw, 6.5rem); }
+  .title-blocus { font-size: clamp(4rem, 20vw, 6rem); }
   .mouvement-stats { grid-template-columns: 1fr 1fr; }
   .dunkerque-info-grid { grid-template-columns: 1fr; }
   .hero-btns { flex-direction: column; align-items: stretch; }
   .btn { justify-content: center; }
+  /* On very small screens, hide separators and show 2-col counter grid */
   .live-sep { display: none; }
-  .live-counter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .live-counter-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    align-items: start;
+  }
+  .live-unit { min-width: unset; width: 100%; }
+  .live-num { font-size: clamp(2.5rem, 12vw, 4rem); }
+  .galerie-item.galerie-hero img { height: 200px; }
+  .galerie-item:not(.galerie-hero) img { height: 160px; }
+  .hero-content { padding: 7rem 1.25rem 5rem; }
+  .mouvement-grid { gap: 2.5rem; }
 }
